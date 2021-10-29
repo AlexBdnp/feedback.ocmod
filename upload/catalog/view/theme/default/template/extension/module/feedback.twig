@@ -1,0 +1,29 @@
+<div id="feedback-form" style="display: flex; max-width: 250px; flex-direction: column; gap: 3px;">
+  <h4>{{ form_title }}</h4>
+  <input type="text" name='name' placeholder="{{ your_name }}" >
+  <input type="text" name='email' placeholder="{{ your_email }}" >
+  <input type="text" name='phone' placeholder="{{ your_phone }}" >
+  <input type="submit" value="{{ leave_request }}">
+  <div class="feedback-alert" style="color: green"></div>
+</div>
+<script>
+  document.querySelector('#feedback-form > input[type=submit]').onclick = function() {
+    const form = document.querySelector('#feedback-form')
+    let body = {
+      "name" : form.children.name.value, 
+      "email" : form.children.email.value, 
+      "phone" : form.children.phone.value
+    }
+    $.post('index.php?route=extension/module/feedback/storeFeedback', body, function (data) {
+      $('#feedback-form > .feedback-alert').text('{{ success }}')
+    })
+    .fail(function() {
+      $('#feedback-form > .feedback-alert').text('{{ error }}')
+    })
+    .always(function() {      
+      setTimeout(() => {
+        $('#feedback-form > .feedback-alert').text('')
+      }, 3000)
+    })
+  }
+</script>
